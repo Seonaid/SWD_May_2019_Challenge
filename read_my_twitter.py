@@ -4,6 +4,7 @@ import datetime as dt
 import pandas as pd
 import matplotlib.pyplot as plt
 import timeline
+import gridspec
 
 tweets = []
 filename = 'twitter-2019-05-01/tweet.js'
@@ -54,27 +55,29 @@ summary['Retweets'] = in_order_retweets.Tweet
 summary['PercentRT'] = summary.Retweets/summary.Tweets
 summary = summary.fillna(0)
 
+# fig = plt.figure(figsize=(10, 6))
+
 # How has my twitter use changed over time?
+figure, ax1, ax2, ax3 = gridspec.create_subplots()
 
-timeline.add_timeline()
-plt.title('Confessions of a Confused Tweeter')
-plt.ylabel('Tweets per month')
+timeline.add_timeline(ax1)
+# ax1.set_title()
+ax1.set_ylabel('Tweets per month')
 
-plt.plot(total_tweets)
+ax1.plot(total_tweets)
 
 
 
-# # Is there an annual pattern to my use of twitter?
+# Is there an annual pattern to my use of twitter?
+months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+monthly_tweets = df.groupby(df['Date'].dt.strftime('%b'))['Tweet'].count().reindex(months)
+# monthly_retweets = retweets.groupby(df['Date'].dt.strftime('%b'))['Tweet'].count().reindex(months)
+ax2.set_title('Tweets per month (total)')
+props = dict(boxstyle='round', facecolor='grey', alpha=0.2)
+ax2.text(4, 350 , 'I go outside for \nmost of the summer', horizontalalignment='center', bbox=props)
+# ax2.set_ylabel('Tweets per month')
+ax2.plot(monthly_tweets)
 
-# plt.figure()
-
-# months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-# monthly_tweets = df.groupby(df['Date'].dt.strftime('%b'))['Tweet'].count().reindex(months)
-# # monthly_retweets = retweets.groupby(df['Date'].dt.strftime('%b'))['Tweet'].count().reindex(months)
-# plt.title('Tweets per month')
-# plt.gcf().text(0.30, 0.2, 'I go outside for most of the summer')
-
-# plt.plot(monthly_tweets)
 
 
 # #What days of the week do I tweet most?
@@ -86,11 +89,12 @@ plt.plot(total_tweets)
 # plt.bar(per_days.index, per_days.Tweet)
 # plt.title('What days of the week do I tweet most?')
 
-# # How has my use of RT changed over time?
-# plt.figure()
+# How has my use of RT changed over time?
 
-# plt.plot(summary.PercentRT)
-# plt.title('A Rising Tide of Retweets')
+ax3.plot(summary.PercentRT)
+ax3.set_title('A Rising Tide of Retweets')
+ax3.set_ylabel('Percent RT')
+ax3.tick_params(labelrotation=45)
 
 
 # # I thought that perhaps I RT more at times that I am using twitter more?
