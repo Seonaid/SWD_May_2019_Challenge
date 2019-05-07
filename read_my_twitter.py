@@ -3,6 +3,7 @@ import numpy as np
 import datetime as dt
 import pandas as pd
 import matplotlib.pyplot as plt
+import timeline
 
 tweets = []
 filename = 'twitter-2019-05-01/tweet.js'
@@ -55,47 +56,49 @@ summary = summary.fillna(0)
 
 # How has my twitter use changed over time?
 
-plt.figure()
+timeline.add_timeline()
 plt.title('Confessions of a Confused Tweeter')
+plt.ylabel('Tweets per month')
 
 plt.plot(total_tweets)
 
 
-# Is there an annual pattern to my use of twitter?
 
-plt.figure()
+# # Is there an annual pattern to my use of twitter?
 
-months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-monthly_tweets = df.groupby(df['Date'].dt.strftime('%b'))['Tweet'].count().reindex(months)
-# monthly_retweets = retweets.groupby(df['Date'].dt.strftime('%b'))['Tweet'].count().reindex(months)
-plt.title('Tweets per month')
-plt.gcf().text(0.30, 0.2, 'I go outside for most of the summer')
+# plt.figure()
 
-plt.plot(monthly_tweets)
+# months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+# monthly_tweets = df.groupby(df['Date'].dt.strftime('%b'))['Tweet'].count().reindex(months)
+# # monthly_retweets = retweets.groupby(df['Date'].dt.strftime('%b'))['Tweet'].count().reindex(months)
+# plt.title('Tweets per month')
+# plt.gcf().text(0.30, 0.2, 'I go outside for most of the summer')
 
-
-#What days of the week do I tweet most?
-
-plt.figure()
-days = ['Mon','Tue','Wed','Thu','Fri','Sat', 'Sun']
-per_days = df.groupby(df['Date'].dt.strftime('%a')).count().reindex(days)
-
-plt.bar(per_days.index, per_days.Tweet)
-plt.title('What days of the week do I tweet most?')
-
-# How has my use of RT changed over time?
-plt.figure()
-
-plt.plot(summary.PercentRT)
-plt.title('A Rising Tide of Retweets')
+# plt.plot(monthly_tweets)
 
 
-# I thought that perhaps I RT more at times that I am using twitter more?
+# #What days of the week do I tweet most?
 
-plt.figure()
+# plt.figure()
+# days = ['Mon','Tue','Wed','Thu','Fri','Sat', 'Sun']
+# per_days = df.groupby(df['Date'].dt.strftime('%a')).count().reindex(days)
 
-plt.title('Do I RT more when I tweet more?')
-plt.scatter(summary.Tweets, summary.PercentRT)
+# plt.bar(per_days.index, per_days.Tweet)
+# plt.title('What days of the week do I tweet most?')
+
+# # How has my use of RT changed over time?
+# plt.figure()
+
+# plt.plot(summary.PercentRT)
+# plt.title('A Rising Tide of Retweets')
+
+
+# # I thought that perhaps I RT more at times that I am using twitter more?
+
+# plt.figure()
+
+# plt.title('Do I RT more when I tweet more?')
+# plt.scatter(summary.Tweets, summary.PercentRT)
 
 
 plt.show()
